@@ -6,13 +6,14 @@ const app = express()
 const booksRouter = require('./routers/books.router')
 
 app.use(bodyParser.json())
-app.use(express.json())
 
 app.use(booksRouter)
 
+app.all('*', (req, res) =>
+  handleError(new Error('no route', {cause: `Route: ${req.url} does not exist`}), res)
+);
+
 app.use((err, req, res, next) => {
-  console.log(err.message)
-  console.log('caught error in middleware')
   handleError(err, res)
 })
 
