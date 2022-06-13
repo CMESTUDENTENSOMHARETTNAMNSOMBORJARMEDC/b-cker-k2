@@ -5,7 +5,7 @@
 :id = 1
 :userAgent = User-Agent: kakoune
 
-GET http://:host/books
+GET http://:host/bottoks
 :userAgent
 ###
 GET http://:host/books/3

@@ -10,8 +10,11 @@ app.use(bodyParser.json())
 app.use(booksRouter)
 
 app.all('*', (req, res) =>
-  handleError(new Error('no route', {cause: `Route: ${req.url} does not exist`}), res)
-);
+  handleError(
+    new Error('no route', { cause: `Route: ${req.url} does not exist` }),
+    res
+  )
+)
 
 app.use((err, req, res, next) => {
   handleError(err, res)

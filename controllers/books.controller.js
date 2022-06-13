@@ -67,13 +67,13 @@ async function editBook(req, res, next) {
       throw new Error('id not found', {
         cause: `Could not find book with id: ${id}`,
       })
-		if (data.id) {
+    if (data.id) {
       const foundNewId = await model.findOne(data.id)
       if (foundNewId)
         throw new Error('id exists', {
           cause: `Book with id: ${data.id} already exists`,
         })
-		}
+    }
     await model.updateOne(id, data)
     const result = await model.findOne(data.id || id)
     res.json(result)

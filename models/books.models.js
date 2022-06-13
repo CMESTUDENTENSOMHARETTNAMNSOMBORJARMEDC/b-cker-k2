@@ -97,8 +97,6 @@ function exists(id) {
   })
 }
 
-
-
 module.exports = {
   books,
   findAll,
@@ -106,5 +104,5 @@ module.exports = {
   findOne,
   deleteOne,
   updateOne,
-  findLastInserted
+  findLastInserted,
 }
