@@ -22,6 +22,8 @@ const db = new sqlite3.Database('./db.sqlite', (error) => {
     } else {
       const insert = "INSERT INTO books (title, author, genre) VALUES (?, ?, ?)"
       db.run(insert, ["sagan", "tolkien", "fantasy"])
+      db.run(insert, ["vägen", "mcarthy", "post apo"])
+      db.run(insert, ["blod", "mcarthy", "väst"])
     }
   })
 })

@@ -8,9 +8,9 @@
 GET http://:host/books
 :userAgent
 ###
-GET http://:host/books/6
+GET http://:host/books/3
 ###
-DELETE http://:host/books/4
+DELETE http://:host/books/2
 ### 
 #//////////////POSTS/////////////////////
 # Request body must go after an empty line
@@ -19,8 +19,8 @@ Content-Type: application/json
 :userAgent
 
 {
-	"title": "",
 	"author": "mcormac",
+	"title": "test",
 	"genre": "post apocalypse"
 }
 ###
@@ -36,21 +36,23 @@ Content-Type: application/json
 
 #//////////////PATCH/////////////////////
 # Request body must go after an empty line
-PATCH http://:host/books/5
+PATCH http://:host/books/10
 Content-Type: application/json
 :userAgent
 
 {
-	"author": "miiimcormac"
+	"author": "miiimcormtttac",
+	"id": 3
 }
 ###
 #//////////////PUT/////////////////////
 # Request body must go after an empty line
-PUT http://:host/books/5
+PUT http://:host/books/6
 Content-Type: application/json
 :userAgent
 
 {
+	"id": 5,
 	"title": "vägen 2",
 	"author": "mcormac",
 	"genre": "post apocalypse"
@@ -63,8 +65,8 @@ Content-Type: application/json
 :userAgent
 
 {
-	"title": "vägen 2",
-	"author": "mcormac",
+	"title": "v 2",
+	"author": "mcormac"
 }
 
 ###

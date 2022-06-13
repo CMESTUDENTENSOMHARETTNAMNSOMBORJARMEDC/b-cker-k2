@@ -3,6 +3,7 @@ errorResponse['id not found'] = { code: 404, text: 'id not found' }
 errorResponse['empty body'] = { code: 404, text: 'empty body' }
 errorResponse['no route'] = { code: 404, text: 'no route' }
 errorResponse['invalid id'] = { code: 400, text: 'invalid id' }
+errorResponse['id exists'] = { code: 409, text: 'id exists' }
 errorResponse['write error'] = { code: 500, text: 'io error' }
 errorResponse['SyntaxError'] = { code: 400, text: 'bad json' }
 errorResponse['invalid type'] = { code: 400, text: 'bad type or empty text' }
@@ -19,9 +20,9 @@ const getErrorResponse = (error) => {
 }
 
 const handleError = (error, res) => {
-  const { code, text } = getErrorResponse(error.name || error)
-  res.status(code).json({ error: text })
+  if (error.name === 'Error') error.name = error.message
+  const { code, text } = getErrorResponse(error.name || error.message)
+  res.status(code).json({ status: 'error', message: error.cause || text })
 }
 
 module.exports = handleError
-

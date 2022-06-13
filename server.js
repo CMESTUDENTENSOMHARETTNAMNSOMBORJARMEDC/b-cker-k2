@@ -11,6 +11,7 @@ app.use(express.json())
 app.use(booksRouter)
 
 app.use((err, req, res, next) => {
+  console.log(err.message)
   console.log('caught error in middleware')
   handleError(err, res)
 })
