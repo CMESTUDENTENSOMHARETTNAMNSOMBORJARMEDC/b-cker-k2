@@ -1,0 +1,78 @@
+###
+# Variables must begin with : symbol and can be referenced anywhere in any following block
+:host = localhost:4000
+:api = feeds
+:id = 1
+:userAgent = User-Agent: kakoune
+
+GET http://:host/books
+:userAgent
+###
+GET http://:host/books/6
+###
+DELETE http://:host/books/4
+### 
+#//////////////POSTS/////////////////////
+# Request body must go after an empty line
+POST http://:host/books
+Content-Type: application/json
+:userAgent
+
+{
+	"title": "",
+	"author": "mcormac",
+	"genre": "post apocalypse"
+}
+###
+# missing props
+POST http://:host/books
+Content-Type: application/json
+:userAgent
+
+{
+	"title": "tt"
+}
+###
+
+#//////////////PATCH/////////////////////
+# Request body must go after an empty line
+PATCH http://:host/books/5
+Content-Type: application/json
+:userAgent
+
+{
+	"author": "miiimcormac"
+}
+###
+#//////////////PUT/////////////////////
+# Request body must go after an empty line
+PUT http://:host/books/5
+Content-Type: application/json
+:userAgent
+
+{
+	"title": "vägen 2",
+	"author": "mcormac",
+	"genre": "post apocalypse"
+}
+
+###
+# Request body must go after an empty line
+PUT http://:host/books/5
+Content-Type: application/json
+:userAgent
+
+{
+	"title": "vägen 2",
+	"author": "mcormac",
+}
+
+###
+# Request body must go after an empty line
+PUT http://:host/books/5
+Content-Type: application/json
+:userAgent
+
+{
+}
+
