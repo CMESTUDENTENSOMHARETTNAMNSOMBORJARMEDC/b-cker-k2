@@ -4,6 +4,10 @@ errorResponse['empty body'] = { code: 404, text: 'empty body' }
 errorResponse['no route'] = { code: 404, text: 'no route' }
 errorResponse['invalid id'] = { code: 400, text: 'invalid id' }
 errorResponse['id exists'] = { code: 409, text: 'id exists' }
+errorResponse['SQLITE_CONSTRAINT: UNIQUE constraint failed: books.id'] = {
+  code: 409,
+  text: 'id exists',
+}
 errorResponse['write error'] = { code: 500, text: 'io error' }
 errorResponse['SyntaxError'] = { code: 400, text: 'bad json' }
 errorResponse['invalid type'] = { code: 400, text: 'bad type or empty text' }

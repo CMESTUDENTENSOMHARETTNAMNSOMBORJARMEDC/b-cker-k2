@@ -1,9 +1,5 @@
 const db = require('../config/db')
 
-/**
- *
- *
- */
 let books = []
 
 function findAll() {
@@ -11,7 +7,6 @@ function findAll() {
   return new Promise((resolve, reject) => {
     db.all(q, (error, rows) => {
       if (error) {
-        console.error(error.message)
         reject(error)
       }
       resolve(rows)
@@ -24,7 +19,6 @@ function findOne(id) {
   return new Promise((resolve, reject) => {
     db.get(q, id, (error, rows) => {
       if (error) {
-        console.error(error.message)
         reject(error)
       }
       resolve(rows)
@@ -37,10 +31,9 @@ function addOne(data) {
   return new Promise((resolve, reject) => {
     db.run(q, [data.title, data.author, data.genre], (error) => {
       if (error) {
-        console.error(error)
         reject(error)
       }
-      resolve(this)
+      resolve()
     })
   })
 }
@@ -62,13 +55,12 @@ function updateOne(id, data) {
     .reduce((res, prop) => (res += ` ${prop} = ?,`), '')
     .slice(0, -1)
   const q = `UPDATE books	SET${props} WHERE id = ?`
-  console.log(id)
   return new Promise((resolve, reject) => {
     db.run(q, [...Object.values(data), id], (error) => {
       if (error) {
         reject(error)
       }
-      resolve(this)
+      resolve()
     })
   })
 }
@@ -77,18 +69,6 @@ function findLastInserted() {
   const q = 'SELECT * FROM books WHERE id = last_insert_rowid()'
   return new Promise((resolve, reject) => {
     db.get(q, (error, rows) => {
-      if (error) {
-        reject(error)
-      }
-      resolve(rows)
-    })
-  })
-}
-
-function exists(id) {
-  const q = 'SELECT * FROM books WHERE id = ?'
-  return new Promise((resolve, reject) => {
-    db.get(q, id, (error, rows) => {
       if (error) {
         reject(error)
       }
