@@ -4,7 +4,7 @@ const { validateId, validateData } = require('../validation')
 const model = require('../models/books.models')
 const { books } = model
 
-async function getBooks(req, res, next) {
+async function getBooks(_, res, next) {
   try {
     const result = await model.findAll()
     res.json(result)
@@ -13,24 +13,18 @@ async function getBooks(req, res, next) {
   }
 }
 
-async function getBook(req, res, next) {
+async function getBook({ params: { id } }, res, next) {
   try {
-    const id = req.params.id
     validateId(id)
-    const foundBook = await model.findOne(id)
-    if (!foundBook)
-      throw new Error('id not found', {
-        cause: `Could not find book with id: ${id}`,
-      })
+    const foundBook = await bookExists(id)
     res.json(foundBook)
   } catch (err) {
     next(err)
   }
 }
 
-async function addBook(req, res, next) {
+async function addBook({ body: data}, res, next) {
   try {
-    const data = req.body
     validateData(data, { task: 'new' })
     await model.addOne(data)
     const result = await model.findLastInserted()
@@ -40,40 +34,23 @@ async function addBook(req, res, next) {
   }
 }
 
-async function deleteBook(req, res, next) {
+async function deleteBook({ params: { id } }, res, next) {
   try {
-    const id = req.params.id
     validateId(id)
-    const foundBook = await model.findOne(id)
-    if (!foundBook)
-      throw new Error('id not found', {
-        cause: `Could not find book with id: ${id}`,
-      })
-    await model.deleteOne(req.params.id)
+    await bookExists(id)
+    await model.deleteOne(id)
     res.status(204).json({ info: 'deleted' })
   } catch (err) {
     next(err)
   }
 }
 
-async function editBook(req, res, next) {
+async function editBook({ body: data, params: { id } }, res, next) {
   try {
-    const data = req.body
     validateData(data, { task: 'partial' })
-    const id = req.params.id
     validateId(id)
-    const foundBook = await model.findOne(id)
-    if (!foundBook)
-      throw new Error('id not found', {
-        cause: `Could not find book with id: ${id}`,
-      })
-    if (data.id) {
-      const foundNewId = await model.findOne(data.id)
-      if (foundNewId)
-        throw new Error('id exists', {
-          cause: `Book with id: ${data.id} already exists`,
-        })
-    }
+    await bookExists(id)
+    if (data.id && data.id != id) await idExists(data.id)
     await model.updateOne(id, data)
     const result = await model.findOne(data.id || id)
     res.json(result)
@@ -82,28 +59,44 @@ async function editBook(req, res, next) {
   }
 }
 
-async function replaceBook(req, res, next) {
+async function replaceBook({ body: data, params: { id } }, res, next) {
   try {
-    const data = req.body
     validateData(data, { task: 'replace' })
-    const id = req.params.id
     validateId(id)
-    const foundBook = await model.findOne(id)
-    if (!foundBook)
-      throw new Error('id not found', {
-        cause: `Could not find book with id: ${id}`,
-      })
-    const foundNewId = await model.findOne(data.id)
-    if (foundNewId)
-      throw new Error('id exists', {
-        cause: `Book with id: ${data.id} already exists`,
-      })
+    await bookExists(id)
+    if (data.id != id) await idExists(data.id)
     await model.updateOne(id, data)
     const result = await model.findOne(data.id)
     res.json(result)
   } catch (err) {
     next(err)
   }
+}
+
+async function bookExists(id) {
+  return new Promise(async (resolve, reject) => {
+    const foundBook = await model.findOne(id)
+    if (!foundBook)
+      reject(
+        new Error('id not found', {
+          cause: `Could not find book with id: ${id}`,
+        })
+      )
+    resolve(foundBook)
+  })
+}
+
+async function idExists(id) {
+  return new Promise(async (resolve, reject) => {
+    const foundBook = await model.findOne(id)
+    if (foundBook)
+      reject(
+        new Error('id exists', {
+          cause: `Book with id: ${id} already exists`,
+        })
+      )
+    resolve(true)
+  })
 }
 
 module.exports = {
